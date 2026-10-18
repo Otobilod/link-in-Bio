@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard · Link-in-Bio Builder</title>
+  <meta name="description" content="Build and customize your link-in-bio profile pages.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="index.html">
+        <span class="brand__logo" data-icon="link" aria-hidden="true"></span>
+        Link-in-Bio Builder
+      </a>
+      <span class="topbar__spacer"></span>
+      <span class="topbar__tag">Prototype · saved in this browser only</span>
+      <button class="btn btn--primary" id="new-profile-btn" type="button">
+        <span data-icon="plus" aria-hidden="true"></span> New profile
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page__head">
+      <div>
+        <h1 class="page__title">Your profiles</h1>
+        <p class="page__subtitle">Create, customize and preview link-in-bio pages.</p>
+      </div>
+    </div>
+
+    <div class="notice">
+      <span data-icon="alert" aria-hidden="true"></span>
+      <div>
+        <strong>Prototype storage — local to this browser.</strong>
+        Profiles are saved with <code>localStorage</code> on this device. They are <em>not</em>
+        published to the internet and cannot be opened from another browser or device.
+        Publishing publicly requires a backend (e.g. Supabase), which is intentionally
+        not faked here.
+      </div>
+    </div>
+
+    <section id="dashboard-content" aria-live="polite">
+      <!-- Rendered by js/dashboard.js -->
+    </section>
+  </main>
+
+  <script src="js/ui.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

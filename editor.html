@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor · Link-in-Bio Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="index.html" id="back-link">
+        <span class="brand__logo" data-icon="link" aria-hidden="true"></span>
+        Link-in-Bio Builder
+      </a>
+      <span class="topbar__spacer"></span>
+      <span class="topbar__tag">Prototype · saved in this browser only</span>
+      <a class="topbar__back" href="index.html">
+        <span data-icon="back" aria-hidden="true"></span> Dashboard
+      </a>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page__head">
+      <div>
+        <h1 class="page__title" id="editor-title">Edit profile</h1>
+        <p class="page__subtitle">Changes appear in the preview instantly. Save to keep them.</p>
+      </div>
+      <div class="editor-actions">
+        <span class="save-state" id="save-state">All changes saved</span>
+        <button class="btn" type="button" id="copy-url-btn">
+          <span data-icon="copy" aria-hidden="true"></span> Copy profile URL
+        </button>
+        <button class="btn" type="button" id="preview-btn">
+          <span data-icon="eye" aria-hidden="true"></span> Open preview
+        </button>
+        <button class="btn btn--primary" type="button" id="save-btn">
+          <span data-icon="save" aria-hidden="true"></span> Save
+        </button>
+      </div>
+    </div>
+
+    <div class="notice">
+      <span data-icon="alert" aria-hidden="true"></span>
+      <div>
+        <strong>Saving is local to this browser.</strong>
+        The profile URL works on this device/browser only. Opening it elsewhere shows a
+        not-found page — genuine public publishing needs a backend (not faked here).
+      </div>
+    </div>
+
+    <form class="editor" id="editor-form" novalidate>
+      <div class="editor__fields">
+        <!-- Profile -->
+        <section class="panel" aria-labelledby="profile-heading">
+          <div class="panel__head">
+            <h2 class="panel__title" id="profile-heading">
+              <span data-icon="user" aria-hidden="true"></span> Profile
+            </h2>
+          </div>
+
+          <div class="field">
+            <label class="label" for="profile-name">Profile name <span class="req">*</span>
+              <span class="char-count"><span id="name-count">0</span>/60</span>
+            </label>
+            <input class="input" id="profile-name" name="name" type="text" maxlength="60"
+                   placeholder="e.g. Alex Morgan" autocomplete="off" required>
+            <p class="field__error" id="profile-name-error">Please enter a profile name.</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="profile-bio">Biography
+              <span class="char-count"><span id="bio-count">0</span>/240</span>
+            </label>
+            <textarea class="textarea" id="profile-bio" name="bio" maxlength="240"
+                      placeholder="A short line about you or your brand…"></textarea>
+          </div>
+
+          <div class="field">
+            <span class="label">Profile image</span>
+            <div class="avatar-row">
+              <div class="avatar-preview" id="avatar-preview" aria-hidden="true"></div>
+              <div style="flex:1">
+                <input class="input" id="profile-avatar" name="avatar" type="url"
+                       placeholder="Paste an image URL (https://…)" autocomplete="off">
+                <p class="field__hint">Or upload a picture — it is stored as a data URL in this browser.</p>
+                <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+                  <label class="btn btn--sm" for="avatar-file">
+                    <span data-icon="edit" aria-hidden="true"></span> Upload image
+                  </label>
+                  <input type="file" id="avatar-file" accept="image/*" class="sr-only">
+                  <button class="btn btn--sm btn--ghost" type="button" id="avatar-clear">Remove</button>
+                </div>
+                <p class="field__error" id="profile-avatar-error">That image URL is not valid.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Links -->
+        <section class="panel" aria-labelledby="links-heading">
+          <div class="panel__head">
+            <div>
+              <h2 class="panel__title" id="links-heading">
+                <span data-icon="link" aria-hidden="true"></span> Links
+              </h2>
+              <p class="panel__hint">Drag with the grip, or use the arrows to reorder.</p>
+            </div>
+            <button class="btn btn--sm btn--primary" type="button" id="add-link-btn">
+              <span data-icon="plus" aria-hidden="true"></span> Add link
+            </button>
+          </div>
+          <div class="links-list" id="links-list"></div>
+          <p class="field__error" id="links-error">Please fix the highlighted links before saving.</p>
+        </section>
+
+        <!-- Design -->
+        <section class="panel" aria-labelledby="design-heading">
+          <div class="panel__head">
+            <h2 class="panel__title" id="design-heading">
+              <span data-icon="palette" aria-hidden="true"></span> Design
+            </h2>
+          </div>
+
+          <div class="field">
+            <span class="label">Theme</span>
+            <div class="theme-grid" id="theme-grid" role="radiogroup" aria-label="Theme"></div>
+          </div>
+
+          <div class="field">
+            <div class="row">
+              <div>
+                <label class="label" for="color-background">Background color</label>
+                <div class="color-field">
+                  <input type="color" id="color-background" value="#6d5dfc">
+                  <span class="color-field__value" id="color-background-value">Theme default</span>
+                  <button class="btn btn--sm btn--ghost" type="button" id="color-background-reset"
+                          title="Reset to theme default">Reset</button>
+                </div>
+              </div>
+              <div>
+                <label class="label" for="color-button">Button color</label>
+                <div class="color-field">
+                  <input type="color" id="color-button" value="#ffffff">
+                  <span class="color-field__value" id="color-button-value">Theme default</span>
+                  <button class="btn btn--sm btn--ghost" type="button" id="color-button-reset"
+                          title="Reset to theme default">Reset</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="row">
+              <div>
+                <label class="label" for="color-text">Text color</label>
+                <div class="color-field">
+                  <input type="color" id="color-text" value="#ffffff">
+                  <span class="color-field__value" id="color-text-value">Theme default</span>
+                  <button class="btn btn--sm btn--ghost" type="button" id="color-text-reset"
+                          title="Reset to theme default">Reset</button>
+                </div>
+              </div>
+              <div>
+                <span class="label">Button shape</span>
+                <div class="segmented" id="shape-control" role="radiogroup" aria-label="Button shape">
+                  <button type="button" data-shape="pill" role="radio">Pill</button>
+                  <button type="button" data-shape="rounded" role="radio">Rounded</button>
+                  <button type="button" data-shape="square" role="radio">Square</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Live preview -->
+      <aside class="preview-pane" aria-label="Live preview">
+        <div class="preview-frame">
+          <div class="preview-frame__bar">
+            <span class="preview-frame__label">Live preview</span>
+            <div class="segmented" id="device-control">
+              <button type="button" data-device="mobile" class="is-active">
+                <span data-icon="devicePhone" aria-hidden="true"></span> Mobile
+              </button>
+              <button type="button" data-device="desktop">
+                <span data-icon="deviceDesktop" aria-hidden="true"></span> Desktop
+              </button>
+            </div>
+          </div>
+          <div class="preview-stage">
+            <div class="preview-stage__inner is-mobile" id="preview-stage">
+              <div id="profile-preview"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </form>
+  </main>
+
+  <script src="js/ui.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/themes.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/editor.js"></script>
+</body>
+</html>
